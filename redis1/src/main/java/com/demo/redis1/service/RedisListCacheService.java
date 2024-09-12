@@ -1,8 +1,8 @@
 package com.demo.redis1.service;
 
-import com.demo.redis1.dto.PersonDTO;
 import com.demo.redis1.dto.RangeDTO;
 import jakarta.annotation.PostConstruct;
+import org.example.PersonDTO;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

@@ -1,17 +1,17 @@
 package com.demo.redis1.service;
 
-import com.demo.redis1.dto.PersonDTO;
 import jakarta.annotation.PostConstruct;
+import org.example.PersonDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class RedisValueCacheService {
     private final ValueOperations<String, Object> valueOps;
 
+    @Autowired
     public RedisValueCacheService(final RedisTemplate<String, Object> redisTemplate) {
         valueOps = redisTemplate.opsForValue();
     }

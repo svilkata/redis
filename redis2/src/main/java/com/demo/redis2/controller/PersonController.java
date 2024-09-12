@@ -1,9 +1,9 @@
 package com.demo.redis2.controller;
 
-import com.demo.redis2.dto.PersonDTO;
 import com.demo.redis2.dto.RangeDTO;
 import com.demo.redis2.service.RedisListCache;
 import com.demo.redis2.service.RedisValueCache;
+import org.example.PersonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/redis2")

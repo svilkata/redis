@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+	implementation files('../sharedlibrary/build/libs/sharedlibrary-1.0-SNAPSHOT.jar')
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

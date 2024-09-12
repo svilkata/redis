@@ -1,4 +1,4 @@
-package com.demo.redis1.dto;
+package org.example;
 
 import java.io.Serializable;
 

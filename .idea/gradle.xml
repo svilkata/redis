@@ -21,6 +21,15 @@
           </set>
         </option>
       </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/sharedlibrary" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../../SYSTEM/GRADLE/gradle-8.5" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/sharedlibrary" />
+          </set>
+        </option>
+      </GradleProjectSettings>
     </option>
   </component>
 </project>

@@ -1,7 +1,7 @@
 package com.demo.redis2.service;
 
-import com.demo.redis2.dto.PersonDTO;
 import com.demo.redis2.dto.RangeDTO;
+import org.example.PersonDTO;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

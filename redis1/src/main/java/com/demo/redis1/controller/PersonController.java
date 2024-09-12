@@ -1,9 +1,9 @@
 package com.demo.redis1.controller;
 
 import com.demo.redis1.service.RedisListCacheService;
-import com.demo.redis1.dto.PersonDTO;
 import com.demo.redis1.dto.RangeDTO;
 import com.demo.redis1.service.RedisValueCacheService;
+import org.example.PersonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
