@@ -1,6 +1,5 @@
 package com.demo.redis1.service;
 
-import com.demo.redis1.dto.RangeDTO;
 import jakarta.annotation.PostConstruct;
 import org.example.PersonDTO;
 import org.springframework.data.redis.core.ListOperations;
@@ -26,8 +25,8 @@ public class RedisListCacheService {
         }
     }
 
-    public List<PersonDTO> getPersonsInRange(final String key, final RangeDTO range) {
-        final List<Object> objects = listOperations.range(key, range.getFrom(), range.getTo());
+    public List<PersonDTO> getPersonsInRange(final String key, int from, int to) {
+        final List<Object> objects = listOperations.range(key, from, to);
         if (CollectionUtils.isEmpty(objects)) {
             return Collections.emptyList();
         }
@@ -46,8 +45,8 @@ public class RedisListCacheService {
         return (PersonDTO) o;
     }
 
-    public void trim(final String key, final RangeDTO range) {
-        listOperations.trim(key, range.getFrom(), range.getTo());
+    public void trim(final String key, int from, int to) {
+        listOperations.trim(key, from, to);
     }
 
     @PostConstruct

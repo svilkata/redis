@@ -1,6 +1,5 @@
 package com.demo.redis2.service;
 
-import com.demo.redis2.dto.RangeDTO;
 import org.example.PersonDTO;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,8 +24,8 @@ public class RedisListCache {
         }
     }
 
-    public List<PersonDTO> getPersonsInRange(final String key, final RangeDTO range) {
-        final List<Object> objects = listOps.range(key, range.getFrom(), range.getTo());
+    public List<PersonDTO> getPersonsInRange(final String key, int from, int to) {
+        final List<Object> objects = listOps.range(key, from, to);
         if (CollectionUtils.isEmpty(objects)) {
             return Collections.emptyList();
         }
@@ -45,7 +44,7 @@ public class RedisListCache {
         return (PersonDTO) o;
     }
 
-    public void trim(final String key, final RangeDTO range) {
-        listOps.trim(key, range.getFrom(), range.getTo());
+    public void trim(final String key, int from, int to) {
+        listOps.trim(key, from, to);
     }
 }

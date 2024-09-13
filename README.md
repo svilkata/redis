@@ -1,6 +1,8 @@
 # A demo project about Redis integrated with SpringMVC and with 2 microservices 
 
-### I. First you should install Redis locally or you can run it also in docker container - for Windows OS better use the docker container. I have used the docker-compose option.
+https://docs.spring.io/spring-data/redis/reference/redis/getting-started.html
+
+### I. First you should install Redis server locally or you can run it also in docker container - for Windows OS better use the docker container. I have used the docker-compose option.
 - https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/
 - https://hub.docker.com/_/redis
 - https://redis.io/learn/operate/orchestration/docker
@@ -13,7 +15,8 @@
 `127.0.0.1:6379> ping -> PONG`
 `127.0.0.1:6379> set Pesho 5 -> OK`
 `127.0.0.1:6379> get Pesho -> "5"`
-- you can stop the container with **docker-compose down --volumes**
+- you can stop the container but keep the existing data with **docker-compose down**
+- you can stop the container and erase data entered so far with **docker-compose down --volumes**
 
 
 ### II. When on sharedlibrary dir, Run `gradle clean build` so that we install the sharedlibrary library jar file - **sharedlibrary-1.0-SNAPSHOT.jar**
@@ -34,7 +37,7 @@
 2. You can run on Postman GET http request `localhost:8080/redis1/123`
 
 
-3. You can create another cache pair (key, value) value on Postman POST `localhost:8080/redis1` with JSON body
+3. You can create another cache pair (key, value) value on Postman POST `localhost:8080/redis1` with JSON request body
 `{
 "id": "456",
 "name": "Atanas",
@@ -69,3 +72,113 @@
 
 
 ### V. Redis List Cache Service on both RedisApp1 (on port 8080) and RedisApp2 (on port 8081)
+1. Create cache pair (key, list) on the **RedisApp1** with http POST `localhost:8080/redis1/list/listkey` and JSON request body
+`[`
+   `{
+   "id": "1_id",
+   "name": "Atanas 18",
+   "age": 18
+   },
+   {
+   "id": "2_id",
+   "name": "Atanas 19",
+   "age": 19
+   },
+   {
+   "id": "3_id",
+   "name": "Atanas 20",
+   "age": 20
+   },
+   {
+   "id": "4_id",
+   "name": "Atanas 21",
+   "age": 21
+   },
+   {
+   "id": "5_id",
+   "name": "Atanas 22",
+   "age": 22
+   }`
+`]`
+2. Run GET on `localhost:8080/redis1/list/listkey` and you will get all the elements in the list with key `listkey`, starting by default from Redis index "0" till index "-1"(the last element).
+
+Beware that for the user we have adjusted the controller query params (representing those Redis list indexes) to start from 1 instead of from 0!
+
+Note that the result is reversed as we are adding with leftPush - people with ids "5_id", "4_id", "3_id", "2_id", "1_id", respective Redis indexes 0 1 2 3 4 5, and respective query params 1 2 3 4 5:
+`[`
+`{
+   "id": "5_id",
+   "name": "Atanas 22",
+   "age": 22
+   },
+   {
+   "id": "4_id",
+   "name": "Atanas 21",
+   "age": 21
+   },
+   {
+   "id": "3_id",
+   "name": "Atanas 20",
+   "age": 20
+   },
+   {
+   "id": "2_id",
+   "name": "Atanas 19",
+   "age": 19
+   },
+   {
+   "id": "1_id",
+   "name": "Atanas 18",
+   "age": 18
+}`
+`]`
+3. Running GET on `localhost:8080/redis1/list/keyoflist123?from=2&to=4` will return people with ids "4_id", "3_id", "2_id", respective Redis indexes 1, 2, 3 and respective query params 2, 3, 4
+`[
+   {
+   "id": "4_id",
+   "name": "Atanas 21",
+   "age": 21
+   },
+   {
+   "id": "3_id",
+   "name": "Atanas 20",
+   "age": 20
+   },
+   {
+   "id": "2_id",
+   "name": "Atanas 19",
+   "age": 19
+   }
+]`
+
+
+4. Get the last right element by also removing it - run `localhost:8080/redis1/list/last/listkey` will return the following JSON response body
+`{
+   "id": "1_id",
+   "name": "Atanas 18",
+   "age": 18
+}`
+5. After that, running again GET on `localhost:8080/redis1/list/listkey` will return 4 elements in total instead of 5 - the person with "1_id" was deleted.
+
+
+7. About the trim operation, run DELETE on `localhost:8080/redis1/list/listkey?from=1&to=2` - this will preserve people with "5_id" and "4_id", Redis indexes 0, 1, and query params 1, 2.
+8. So people with "3_id" and "4_id" will also be deleted. You can check by running GET on `localhost:8080/redis1/list/listkey` - the result response JSON body is:
+`[
+   {
+   "id": "5_id",
+   "name": "Atanas 22",
+   "age": 22
+   },
+   {
+   "id": "4_id",
+   "name": "Atanas 21",
+   "age": 21
+   }
+]`
+
+
+9. Same operations about GET, POST and DELETE http requests you may also run on the **RedisApp2** on `localhost:8081/redis2/list*****` without any problem - at any time and step!
+
+
+### VI. The database of Redis would look like this in the IntelliJ db plugin 
+![img.png](img.png)
