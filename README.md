@@ -19,7 +19,7 @@ https://docs.spring.io/spring-data/redis/reference/redis/getting-started.html
 - you can stop the container and erase data entered so far with **docker-compose down --volumes**
 
 
-### II. When on sharedlibrary dir, Run `gradle clean build` so that we install the sharedlibrary library jar file - **sharedlibrary-1.0-SNAPSHOT.jar**
+### II. When on sharedlibrary dir, Run `gradle clean build` so that we install the sharedlibrary library jar file - `sharedlibrary-1.0-SNAPSHOT.jar`
 - The **PersonDTO** should be shared in a common library in order to escape the java.lang.ClassNotFoundException:
 - The Redis object classes (e.g., **PersonDTO**) need to be defined in a shared module or library that is accessible to both microservices. This ensures that the class definitions are available during deserialization.
 
