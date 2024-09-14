@@ -2,6 +2,9 @@
 
 https://docs.spring.io/spring-data/redis/reference/redis/getting-started.html
 
+
+Redis - FANOUT pattern by default - i.e. to all subscribers and not bindings (based on keys) taken into account 
+
 ### I. First you should install Redis server locally or you can run it also in docker container - for Windows OS better use the docker container. I have used the docker-compose option.
 - https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/
 - https://hub.docker.com/_/redis
@@ -15,12 +18,14 @@ https://docs.spring.io/spring-data/redis/reference/redis/getting-started.html
 `127.0.0.1:6379> ping -> PONG`
 `127.0.0.1:6379> set Pesho 5 -> OK`
 `127.0.0.1:6379> get Pesho -> "5"`
+- **AUTH mypass** - authorizing the Redis CLI
+- **monitor** - monitor Redis operations on the Redis CLI
 - you can stop the container but keep the existing data with **docker-compose down**
 - you can stop the container and erase data entered so far with **docker-compose down --volumes**
 
 
 ### II. When on sharedlibrary dir, Run `gradle clean build` so that we install the sharedlibrary library jar file - `sharedlibrary-1.0-SNAPSHOT.jar`
-- The **PersonDTO** should be shared in a common library in order to escape the java.lang.ClassNotFoundException:
+- The **PersonDTO** should be shared in a common library in order to escape the **java.lang.ClassNotFoundException**:
 - The Redis object classes (e.g., **PersonDTO**) need to be defined in a shared module or library that is accessible to both microservices. This ensures that the class definitions are available during deserialization.
 
 
@@ -195,3 +200,14 @@ Note that the result is reversed as we are adding with leftPush - people with id
    - `[onPool-worker-3] c.demo.redis1.service.PlaygroundService  : Task result : 'null' -> exception : 'true'`
    - `[onPool-worker-2] c.demo.redis1.service.PlaygroundService  : Task result : 'null' -> exception : 'true'`
    - and after the `howLongShouldLockBeAcquiredSeconds` exceeds this exception is thrown:  `java.lang.Exception: Failed to acquire lock in 5000 milliseconds`
+
+
+### VI. Publish-subscribe messages on Redis - synchronous approach
+1. **RedisApp1** is publisher, **RedisApp2** is subscriber/listener, channel topic is `mytopicname`
+2. In Postman run POST http request on **RedisApp1** `localhost:8080/redis1/publish` with request body 
+`{
+   "data": "Hello Worlds",
+   "author": "Svilen"
+}`
+3. When in advance you have run MONITOR in the Redis CLI, you can see this: `1726337669.034901 [0 172.18.0.1:35754] "PUBLISH" "mytopicname" "\xac\xed\x00\x05t\x00-Message{data='Hello Worlds', author='Svilen'}"`
+4. In the logs of **RedisApp2** you can also see the message was received: `INFO 21528 --- [redis2] [    container-1] c.d.r.config.RedisMessageSubscriber      : Message received: �� t -Message{data='Hello Worlds', author='Svilen'}`

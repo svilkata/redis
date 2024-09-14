@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
 
 @Configuration
 public class RedisConfiguration {
@@ -27,5 +28,16 @@ public class RedisConfiguration {
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
         return redisTemplate;
+    }
+
+    @Bean
+    public ChannelTopic topic() {
+        return new ChannelTopic("mytopicname");
+    }
+
+    //Injecting the RedisTemplate<String, Object> bean and ChannelTopic bean
+    @Bean
+    MessagePublisher messagePublisher(RedisTemplate<String, Object> redisTemplate, ChannelTopic channelTopic) {
+        return new RedisMessagePublisher(redisTemplate, channelTopic);
     }
 }
