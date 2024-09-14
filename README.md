@@ -1,5 +1,8 @@
 # A demo project about Redis integrated with SpringMVC and with 2 microservices 
 
+REmote DIctionary Server = REDIS
+
+
 https://docs.spring.io/spring-data/redis/reference/redis/getting-started.html
 
 
