@@ -177,8 +177,21 @@ Note that the result is reversed as we are adding with leftPush - people with id
 ]`
 
 
-9. Same operations about GET, POST and DELETE http requests you may also run on the **RedisApp2** on `localhost:8081/redis2/list*****` without any problem - at any time and step!
+9. If you want to delete the whole pair(key-list), you can run DELETE on `localhost:8080/redis1/list/deep/listkey`
+
+
+10. Same operations about GET, POST and DELETE http requests you may also run on the **RedisApp2** on `localhost:8081/redis2/list*****` without any problem - at any time and step!
 
 
 ### VI. The database of Redis would look like this in the IntelliJ db plugin 
 ![img.png](img.png)
+
+
+### V. Distributed locker demo
+1. If we want to lock a specific Redis key for a certain amount of time before we delete that Redis key
+2. We have 3 workers in the PlaygroundService trying to insert same Redis key asynchronously
+3. If we disable the releaseLock (aka not deleting the Redis pair with that key), then only first worker succeeds
+   - `[onPool-worker-1] c.demo.redis1.service.PlaygroundService  : Task result : '1' -> exception : 'false'`
+   - `[onPool-worker-3] c.demo.redis1.service.PlaygroundService  : Task result : 'null' -> exception : 'true'`
+   - `[onPool-worker-2] c.demo.redis1.service.PlaygroundService  : Task result : 'null' -> exception : 'true'`
+   - and after the `howLongShouldLockBeAcquiredSeconds` exceeds this exception is thrown:  `java.lang.Exception: Failed to acquire lock in 5000 milliseconds`

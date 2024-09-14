@@ -1,6 +1,7 @@
 package com.demo.redis2.service;
 
 import org.example.PersonDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 public class RedisListCache {
     private ListOperations<String, Object> listOps;
 
+    @Autowired
     public RedisListCache(final RedisTemplate<String, Object> redisTemplate) {
         listOps = redisTemplate.opsForList();
     }
@@ -46,5 +48,9 @@ public class RedisListCache {
 
     public void trim(final String key, int from, int to) {
         listOps.trim(key, from, to);
+    }
+
+    public void deleteCachedList(String key) {
+        listOps.getOperations().delete(key); //could be also redisTemplate.delete(key) regardless of kind of pair
     }
 }

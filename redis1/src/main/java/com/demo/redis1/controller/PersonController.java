@@ -69,4 +69,9 @@ public class PersonController {
                 from - 1, //0 is the Redis index of the first element
                 to - 1); //-1 is the Redis last element including
     }
+
+    @DeleteMapping("/list/deep/{key}")
+    public void trim(@PathVariable final String key) {
+        listCache.deleteCachedList(key);
+    }
 }

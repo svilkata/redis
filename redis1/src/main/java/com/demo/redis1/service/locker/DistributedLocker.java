@@ -2,6 +2,7 @@ package com.demo.redis1.service.locker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class DistributedLocker {
     private static final long DEFAULT_RETRY_TIME = 100L;
     private final ValueOperations<String, String> valueOps;
 
+    @Autowired
     public DistributedLocker(final RedisTemplate<String, String> redisTemplate) {
         this.valueOps = redisTemplate.opsForValue();
     }
@@ -26,7 +28,9 @@ public class DistributedLocker {
                                            final Callable<T> task) {
         try {
             return tryToGetLock(() -> {
+                //setting a value in Redis - if it is present in Redis it will return false; if absent it will return true
                 final Boolean lockAcquired = valueOps.setIfAbsent(key, key, lockTimeoutSeconds, TimeUnit.SECONDS);
+
                 if (lockAcquired == Boolean.FALSE) {
                     LOG.error("Failed to acquire lock for key '{}'", key);
                     return null;
